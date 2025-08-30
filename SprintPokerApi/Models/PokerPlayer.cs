@@ -11,8 +11,8 @@ public class PokerPlayer : AuditableEntity
     public string Email { get; set; } = string.Empty;
     [MaxLength(256)]
     public string DisplayName { get; set; } = string.Empty;
-    public Guid? PokerRoomId { get; set; }
-    public PokerRoom? PokerRoom { get; set; }
+    public Guid? PokerRoomCurrentId { get; set; }
+    public PokerRoom? PokerRoomCurrent { get; set; }
     public List<PokerRoom> PokerRooms { get; set; } = new();
 
     public class Configuration : IEntityTypeConfiguration<PokerPlayer>
