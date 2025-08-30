@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SprintPokerApi.Helpers;
 using SprintPokerApi.Models;
 
 namespace SprintPokerApi.Data;
@@ -10,6 +11,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<PokerPlayer> PokerPlayers { get; set; }
     public DbSet<PokerRoom> PokerRooms { get; set; }
     public DbSet<Vote> Votes { get; set; }
+    
+    /// <summary>
+    /// Override to automatically apply XML documentation comments from model properties as database column comments.
+    /// </summary>
+    /// <param name="modelBuilder">
+    /// The builder being used to construct the model for this context. Databases (and other extensions)
+    /// typically define extension methods on this object that allow you to configure aspects of the model
+    /// that are specific to a given database.
+    /// </param>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyXmlDocComments(typeof(AppDbContext).Assembly);
+    }
     
     
     /// <summary>
