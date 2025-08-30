@@ -40,7 +40,7 @@ services:
     working_dir: /app
     command: sh -c "apk update && apk add libcap && npm install && npm run ${NPM_RUN_COMMAND}"
     # These environment variables are used by the Vite build process
-    # in /StarWarsClient/vite.config.js
+    # in /SprintPokerWeb/vite.config.js
     environment:
       VITE_HOSTNAME_CLIENT: ${HOSTNAME_CLIENT}
       VITE_CLIENT_HTTPS_PORT: ${CLIENT_HTTPS_PORT}
@@ -57,7 +57,7 @@ services:
     networks:
       - app_network
     depends_on:
-      starwarsinfo:
+      sprintpokerapi:
         condition: service_started
       
   postgres:

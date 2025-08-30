@@ -4,3 +4,7 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 .idea/
+/Keycloak/themes/org.keycloak.*
+/Keycloak/import/*.json
+.vs/
+.env

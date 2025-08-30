@@ -32,4 +32,8 @@ replace_hostname_from_env() {
     log_output "Complete" "$COLOR_GREEN"
 }
 
-replace_hostname_from_env
+if [ -f "$KC_IMPORT_TEMPLATE" ]; then
+    replace_hostname_from_env
+else
+    log_output "Skipping Keycloak import, no keycloak template file found at: $KC_IMPORT_TEMPLATE" "$COLOR_GREEN" "$0"
+fi
