@@ -15,9 +15,9 @@ source "$(dirname "$0")/Common/common-functions.sh"
   # This is the array of directories/files that should be deleted
   # as part of the cleanup process.
   declare dirs_to_remove=(
-      "./StarWarsInfoClient/node_modules"
-      "./StarWarsInfo/bin"
-      "./StarWarsInfo/obj"
+      "./SprintPokerWeb/node_modules"
+      "./SprintPokerApi/bin"
+      "./SprintPokerApi/obj"
   )
 }
 

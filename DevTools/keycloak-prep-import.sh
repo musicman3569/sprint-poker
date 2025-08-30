@@ -24,10 +24,10 @@ replace_hostname_from_env() {
     cp "$KC_IMPORT_TEMPLATE" "$KC_IMPORT_FILE"
 
     log_output "Updating CLIENT host references to ${HOSTNAME_CLIENT}:${CLIENT_HTTPS_PORT}"    
-    sed_replace "s|starwarsinfo\.test:8080|${HOSTNAME_CLIENT}:${CLIENT_HTTPS_PORT}|g" "$KC_IMPORT_FILE"
+    sed_replace "s|sprintpoker\.test:8080|${HOSTNAME_CLIENT}:${CLIENT_HTTPS_PORT}|g" "$KC_IMPORT_FILE"
     
     log_output "Keycloak KEYCLOAK host references to ${KC_HOSTNAME}:${KC_HTTPS_PORT}"
-    sed_replace "s|starwarsinfo\.test:8082|${KC_HOSTNAME}:${KC_HTTPS_PORT}|g" "$KC_IMPORT_FILE"
+    sed_replace "s|sprintpoker\.test:8082|${KC_HOSTNAME}:${KC_HTTPS_PORT}|g" "$KC_IMPORT_FILE"
     
     log_output "Complete" "$COLOR_GREEN"
 }

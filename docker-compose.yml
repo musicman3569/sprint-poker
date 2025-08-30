@@ -1,0 +1,125 @@
+services:
+  sprintpokerapi:
+    image: ${DOCKER_REGISTRY-}sprintpoker
+    build:
+      context: .
+      dockerfile: SprintPokerApi/Dockerfile
+      args:
+        API_HTTPS_PORT: ${API_HTTPS_PORT}
+        BUILD_CONFIGURATION: ${BUILD_CONFIGURATION}
+    environment:
+      ASPNETCORE_URLS: "https://+:${API_HTTPS_PORT}"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/SSL/${HOSTNAME_API}.crt"
+      ASPNETCORE_Kestrel__Certificates__Default__KeyPath: "/SSL/${HOSTNAME_API}.key"
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=${LOCALDEV__POSTGRES_PORT:-5432};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Search Path=sprintpoker"
+      VSTEST_HOST_DEBUG: 1
+      CLIENT_APP_URL_NO_PORT: "https://${HOSTNAME_CLIENT}"
+      CLIENT_APP_URL: "https://${HOSTNAME_CLIENT}:${CLIENT_HTTPS_PORT}"
+      KEYCLOAK_URL: "https://${KC_HOSTNAME}:${KC_HTTPS_PORT}"
+    volumes:
+      - ./SSL:/SSL
+      - dotnet_nuget:/root/.nuget/packages
+    env_file:
+      - .env
+    ports:
+      - ${API_HTTPS_PORT}:${API_HTTPS_PORT}
+      - 5000:5000
+    networks:
+      - app_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  
+  sprintpokerweb:
+    image: node:24.5.0-alpine3.22
+    volumes:
+      - ./SSL:/SSL
+      - ./SprintPokerWeb:/app
+    working_dir: /app
+    command: sh -c "apk update && apk add libcap && npm install && npm run ${NPM_RUN_COMMAND}"
+    # These environment variables are used by the Vite build process
+    # in /StarWarsClient/vite.config.js
+    environment:
+      VITE_HOSTNAME_CLIENT: ${HOSTNAME_CLIENT}
+      VITE_CLIENT_HTTPS_PORT: ${CLIENT_HTTPS_PORT}
+      VITE_HOSTNAME_API: ${HOSTNAME_API}
+      VITE_API_HTTPS_PORT: ${API_HTTPS_PORT}
+      VITE_API_URL: "https://${HOSTNAME_API}:${API_HTTPS_PORT}/v1"
+      VITE_KEYCLOAK_URL: "https://${KC_HOSTNAME}:${KC_HTTPS_PORT}"
+    expose:
+      - ${CLIENT_HTTPS_PORT}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - ${CLIENT_HTTPS_PORT}:${CLIENT_HTTPS_PORT}
+    networks:
+      - app_network
+    depends_on:
+      starwarsinfo:
+        condition: service_started
+      
+  postgres:
+    image: postgres:15.8
+    platform: linux/amd64
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./Postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    # Wait for the DB to actually be fully started and listening
+    # for connections on the specified port before reporting healthy
+    # to dependent services that should wait to start.
+    healthcheck:
+      test: pg_isready -h localhost -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 2s
+      timeout: 5s
+      retries: 40
+    expose:
+      - 5432
+    ports:
+      - ${LOCALDEV__POSTGRES_PORT:-5432}:5432
+    networks:
+      - app_network
+
+  keycloak:
+    image: keycloak/keycloak:26.3
+    depends_on:
+      postgres:
+        condition: service_healthy
+    platform: linux/amd64
+    entrypoint: /opt/keycloak/bin/kc.sh "${KEYCLOAK_ENTRYPOINT}" ${KEYCLOAK_ENTRYPOINT_ARG}
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      KC_HOSTNAME: ${KC_HOSTNAME}
+      KC_HTTPS_PORT: ${KC_HTTPS_PORT}
+      KC_HOSTNAME_STRICT: ${KC_HOSTNAME_STRICT}
+      KC_DB: ${KC_DB}
+      KC_DB_SCHEMA: ${KC_DB_SCHEMA}
+      KC_DB_URL: jdbc:postgresql://postgres:${LOCALDEV__POSTGRES_PORT}/${POSTGRES_DB}
+      KC_DB_DATABASE: ${POSTGRES_DB}
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_HTTPS_CERTIFICATE_FILE: /SSL/${KC_HOSTNAME}.crt
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /SSL/${KC_HOSTNAME}.key
+    volumes:
+      - ./SSL:/SSL
+      - ./Keycloak/import:/opt/keycloak/data/import
+      #- ./Keycloak/themes/sprintpoker:/opt/keycloak/themes/sprintpoker
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - app_network
+    ports:
+      - ${KC_HTTPS_PORT}:${KC_HTTPS_PORT}
+
+volumes:
+  postgres_data:
+  dotnet_nuget:
+
+networks:
+  app_network:

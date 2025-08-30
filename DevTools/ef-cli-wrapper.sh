@@ -52,7 +52,7 @@ fi
 source "$SCRIPT_PATH/../.env"
 
 # Initialize global script variables.
-export ConnectionStrings__DefaultConnection="Host=localhost;Port=${LOCALDEV__POSTGRES_PORT:-5432};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Search Path=starwarsinfo"
+export ConnectionStrings__DefaultConnection="Host=localhost;Port=${LOCALDEV__POSTGRES_PORT:-5432};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Search Path=sprintpoker"
 
 dotnet ef "$1" "$2" \
     --project StarWarsInfo/StarWarsInfo.csproj \
