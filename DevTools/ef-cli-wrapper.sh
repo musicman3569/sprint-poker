@@ -55,8 +55,8 @@ source "$SCRIPT_PATH/../.env"
 export ConnectionStrings__DefaultConnection="Host=localhost;Port=${LOCALDEV__POSTGRES_PORT:-5432};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Search Path=sprintpoker"
 
 dotnet ef "$1" "$2" \
-    --project StarWarsInfo/StarWarsInfo.csproj \
-    --startup-project StarWarsInfo/StarWarsInfo.csproj \
-    --context StarWarsInfo.Data.AppDbContext \
+    --project SprintPokerApi/SprintPokerApi.csproj \
+    --startup-project SprintPokerApi/SprintPokerApi.csproj \
+    --context SprintPokerApi.Data.AppDbContext \
     --configuration Debug \
     "${@:3}"
