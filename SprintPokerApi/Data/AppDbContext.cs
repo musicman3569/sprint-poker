@@ -24,6 +24,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     {
         base.OnModelCreating(modelBuilder);
         
+        // Apply C# documentation comments from model class/properties as database comments
         var xmlComments = new ModelBuilderXmlComments(modelBuilder, typeof(AppDbContext).Assembly);
         xmlComments.ApplyXmlDocComments();
     }
