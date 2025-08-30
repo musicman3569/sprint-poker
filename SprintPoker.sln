@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SprintPokerApi", "SprintPokerApi\SprintPokerApi.csproj", "{9B520035-4AED-459E-B7C4-36F8BE0B0401}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SprintPokerApiTest", "SprintPokerApiTest\SprintPokerApiTest.csproj", "{D544B8A1-DF9E-4F1B-AD62-573089E0CD9B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B520035-4AED-459E-B7C4-36F8BE0B0401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B520035-4AED-459E-B7C4-36F8BE0B0401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B520035-4AED-459E-B7C4-36F8BE0B0401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B520035-4AED-459E-B7C4-36F8BE0B0401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D544B8A1-DF9E-4F1B-AD62-573089E0CD9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D544B8A1-DF9E-4F1B-AD62-573089E0CD9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D544B8A1-DF9E-4F1B-AD62-573089E0CD9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D544B8A1-DF9E-4F1B-AD62-573089E0CD9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
