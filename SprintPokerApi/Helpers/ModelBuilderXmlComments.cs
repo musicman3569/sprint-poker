@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -26,6 +27,8 @@ public class ModelBuilderXmlComments
         _modelBuilder = modelBuilder;
         
         xmlPath ??= Path.Combine(AppContext.BaseDirectory, $"{assembly.GetName().Name}.xml");
+        Console.WriteLine($"[ModelBuilderXmlComments] Loading XML documentation from {xmlPath}");
+        
         if (File.Exists(xmlPath))
         {
             var doc = XDocument.Load(xmlPath);
@@ -42,12 +45,17 @@ public class ModelBuilderXmlComments
     /// </summary>
     public void ApplyXmlDocComments()
     {
-        if (_members.IsNullOrEmpty()) return;
+        if (_members.IsNullOrEmpty())
+        {
+            Console.WriteLine("[ApplyXmlDocComments] No XML documentation found.");
+            return;
+        }
         
         foreach (var entityType in _modelBuilder.Model.GetEntityTypes())
         {
-           ApplyTableComments(entityType);
-           ApplyPropertyComments(entityType);
+            Console.WriteLine($"[ApplyXmlDocComments] Applying comments to {entityType.ClrType.Name}");
+            ApplyTableComments(entityType);
+            ApplyPropertyComments(entityType);
         }
     }
 
@@ -61,7 +69,7 @@ public class ModelBuilderXmlComments
         return _members.TryGetValue(key, out var summary) ? 
             string.IsNullOrWhiteSpace(summary) ? 
                 null : 
-                summary
+                Regex.Replace(summary, @"\s+", " ")
             : null;
     }
     
