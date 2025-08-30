@@ -23,8 +23,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
-        // Apply C# documentation comments from model class/properties as database comments
+
+        // Apply all IEntityTypeConfiguration<> classes from this assembly
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+        // Apply C# documentation comments as database comments
         var xmlComments = new ModelBuilderXmlComments(modelBuilder, typeof(AppDbContext).Assembly);
         xmlComments.ApplyXmlDocComments();
     }

@@ -38,12 +38,6 @@ public class PokerPlayer : AuditableEntity
         public void Configure(EntityTypeBuilder<PokerPlayer> builder)
         {
             builder.HasIndex(p => p.Email).IsUnique();
-
-            builder
-                .HasOne(player => player.PokerRoomCurrent)
-                .WithMany(room => room.CurrentPlayers)
-                .HasForeignKey(player => player.PokerRoomCurrentId)
-                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
