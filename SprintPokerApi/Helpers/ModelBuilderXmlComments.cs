@@ -18,43 +18,53 @@ public static class ModelBuilderXmlComments
             m => (string?)m.Element("summary")?.Value.Trim()
         );
 
-        string? Summary(string key) =>
-            members.TryGetValue(key, out var s) ? string.IsNullOrWhiteSpace(s) ? null : s : null;
-
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
-            var clrType = entityType.ClrType;
-            
-            // Table comments from Model class comments
-            var typeKey = $"T:{clrType.FullName}";
-            var typeSummary = Summary(typeKey);
-            if (!string.IsNullOrWhiteSpace(typeSummary))
-            {
-                modelBuilder.Entity(clrType).ToTable(tb => tb.HasComment(typeSummary));
-            }
-
-            // Column comments from Model property comments
-            foreach (var prop in entityType.GetProperties())
-            {
-                var pi = prop.PropertyInfo;
-                if (pi == null) continue;
-
-                var propKey = $"P:{pi.DeclaringType!.FullName}.{pi.Name}";
-                var propSummary = Summary(propKey);
-                if (!string.IsNullOrWhiteSpace(propSummary))
-                {
-                    modelBuilder.Entity(clrType).Property(pi.Name).HasComment(propSummary);
-                }
-            }
+           ApplyTableComments(modelBuilder, entityType, members);
+           ApplyPropertyComments(modelBuilder, entityType, members);
         }
     }
 
-    // private static void Summary(string key)
-    // {
-    //     
-    // }
-    //
-    // private static void ApplyCommentToEntityType(IMutableEntityType entityType)
-    // {
-    // }
+    private static string? Summary(string key, Dictionary<string, string?> members)
+    {
+        return members.TryGetValue(key, out var summary) ? 
+            string.IsNullOrWhiteSpace(summary) ? 
+                null : 
+                summary
+            : null;
+    }
+    
+    private static void ApplyTableComments(ModelBuilder modelBuilder, IMutableEntityType entityType, Dictionary<string, string?> members)
+    {
+        var clrType = entityType.ClrType;
+            
+        // Table comments from Model class comments
+        var typeKey = $"T:{clrType.FullName}";
+        var typeSummary = Summary(typeKey, members);
+        if (!string.IsNullOrWhiteSpace(typeSummary))
+        {
+            modelBuilder.Entity(clrType).ToTable(tb => tb.HasComment(typeSummary));
+        }
+    }
+
+    private static void ApplyPropertyComments(ModelBuilder modelBuilder, IMutableEntityType entityType,
+        Dictionary<string, string?> members)
+    {
+        // Column comments from Model property comments
+        foreach (var prop in entityType.GetProperties())
+        {
+            var propInfo = prop.PropertyInfo;
+            if (propInfo == null) continue;
+
+            var propKey = $"P:{propInfo.DeclaringType!.FullName}.{propInfo.Name}";
+            var propSummary = Summary(propKey, members);
+            if (!string.IsNullOrWhiteSpace(propSummary))
+            {
+                modelBuilder
+                    .Entity(entityType.ClrType)
+                    .Property(propInfo.Name)
+                    .HasComment(propSummary);
+            }
+        }
+    }
 }
