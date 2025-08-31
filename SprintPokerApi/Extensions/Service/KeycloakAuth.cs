@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -135,5 +136,16 @@ public static class KeycloakAuth
                 return Task.CompletedTask;
             }
         };
+    }
+
+    
+    /// <summary>
+    /// Retrieves the username from the Keycloak JWT token in the HTTP context.
+    /// </summary>
+    /// <param name="context">The HTTP context containing the user's claims.</param>
+    /// <returns>The user's email from the JWT token claims, or "unknown" if not found.</returns>
+    public static string GetKeycloakJwtUsername(HttpContext? context)
+    {
+        return context?.User?.FindFirstValue(ClaimTypes.Email) ?? "unknown";
     }
 }

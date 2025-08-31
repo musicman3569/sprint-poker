@@ -21,8 +21,8 @@ namespace SprintPokerApi.Migrations
                     Name = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false, comment: "The name of the card set. Limited to 36 characters."),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "The date and time when the entity was created. Defaults to the current date and time."),
                     ModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "The date and time when the entity was last modified. Defaults to the current date and time."),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false, comment: "The unique identifier of the user who created the entity."),
-                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: false, comment: "The unique identifier of the user who last modified the entity.")
+                    CreatedBy = table.Column<string>(type: "text", nullable: false, comment: "The username of the user who created the entity."),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: false, comment: "The username of the user who last modified the entity.")
                 },
                 constraints: table =>
                 {
@@ -55,8 +55,8 @@ namespace SprintPokerApi.Migrations
                     CardSetId = table.Column<int>(type: "integer", nullable: false, comment: "The identifier of the card set this card belongs to."),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "The date and time when the entity was created. Defaults to the current date and time."),
                     ModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "The date and time when the entity was last modified. Defaults to the current date and time."),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false, comment: "The unique identifier of the user who created the entity."),
-                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: false, comment: "The unique identifier of the user who last modified the entity.")
+                    CreatedBy = table.Column<string>(type: "text", nullable: false, comment: "The username of the user who created the entity."),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: false, comment: "The username of the user who last modified the entity.")
                 },
                 constraints: table =>
                 {
@@ -79,8 +79,8 @@ namespace SprintPokerApi.Migrations
                     CardSetId = table.Column<int>(type: "integer", nullable: false, comment: "The identifier of the card set used in this poker room."),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "The date and time when the entity was created. Defaults to the current date and time."),
                     ModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "The date and time when the entity was last modified. Defaults to the current date and time."),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false, comment: "The unique identifier of the user who created the entity."),
-                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: false, comment: "The unique identifier of the user who last modified the entity.")
+                    CreatedBy = table.Column<string>(type: "text", nullable: false, comment: "The username of the user who created the entity."),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: false, comment: "The username of the user who last modified the entity.")
                 },
                 constraints: table =>
                 {
@@ -104,8 +104,8 @@ namespace SprintPokerApi.Migrations
                     PokerRoomCurrentId = table.Column<Guid>(type: "uuid", nullable: true, comment: "The identifier of the poker room where the player is currently present."),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "The date and time when the entity was created. Defaults to the current date and time."),
                     ModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "The date and time when the entity was last modified. Defaults to the current date and time."),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false, comment: "The unique identifier of the user who created the entity."),
-                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: false, comment: "The unique identifier of the user who last modified the entity.")
+                    CreatedBy = table.Column<string>(type: "text", nullable: false, comment: "The username of the user who created the entity."),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: false, comment: "The username of the user who last modified the entity.")
                 },
                 constraints: table =>
                 {

@@ -19,12 +19,12 @@ public class AuditableEntity
     public DateTime ModifiedAt { get; set; } = DateTime.Now;
 
     /// <summary>
-    /// The unique identifier of the user who created the entity.
+    /// The username of the user who created the entity.
     /// </summary>
-    public Guid CreatedBy { get; set; }
+    public string CreatedBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// The unique identifier of the user who last modified the entity.
+    /// The username of the user who last modified the entity.
     /// </summary>
-    public Guid ModifiedBy { get; set; }
+    public string ModifiedBy { get; set; } = string.Empty;
 }

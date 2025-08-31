@@ -12,7 +12,7 @@ using SprintPokerApi.Data;
 namespace SprintPokerApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250830213137_InitialSchema")]
+    [Migration("20250831174906_InitialSchema")]
     partial class InitialSchema
     {
         /// <inheritdoc />
@@ -57,9 +57,10 @@ namespace SprintPokerApi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasComment("The date and time when the entity was created. Defaults to the current date and time.");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasComment("The unique identifier of the user who created the entity.");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("The username of the user who created the entity.");
 
                     b.Property<string>("DisplayName")
                         .HasMaxLength(24)
@@ -70,9 +71,10 @@ namespace SprintPokerApi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasComment("The date and time when the entity was last modified. Defaults to the current date and time.");
 
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uuid")
-                        .HasComment("The unique identifier of the user who last modified the entity.");
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("The username of the user who last modified the entity.");
 
                     b.Property<int>("Value")
                         .HasColumnType("integer")
@@ -101,17 +103,19 @@ namespace SprintPokerApi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasComment("The date and time when the entity was created. Defaults to the current date and time.");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasComment("The unique identifier of the user who created the entity.");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("The username of the user who created the entity.");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasComment("The date and time when the entity was last modified. Defaults to the current date and time.");
 
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uuid")
-                        .HasComment("The unique identifier of the user who last modified the entity.");
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("The username of the user who last modified the entity.");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -138,9 +142,10 @@ namespace SprintPokerApi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasComment("The date and time when the entity was created. Defaults to the current date and time.");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasComment("The unique identifier of the user who created the entity.");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("The username of the user who created the entity.");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -158,9 +163,10 @@ namespace SprintPokerApi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasComment("The date and time when the entity was last modified. Defaults to the current date and time.");
 
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uuid")
-                        .HasComment("The unique identifier of the user who last modified the entity.");
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("The username of the user who last modified the entity.");
 
                     b.Property<Guid?>("PokerRoomCurrentId")
                         .HasColumnType("uuid")
@@ -194,17 +200,19 @@ namespace SprintPokerApi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasComment("The date and time when the entity was created. Defaults to the current date and time.");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasComment("The unique identifier of the user who created the entity.");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("The username of the user who created the entity.");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasComment("The date and time when the entity was last modified. Defaults to the current date and time.");
 
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uuid")
-                        .HasComment("The unique identifier of the user who last modified the entity.");
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("The username of the user who last modified the entity.");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -1,11 +1,22 @@
+using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using SprintPokerApi.Extensions.Service;
 using SprintPokerApi.Helpers;
 using SprintPokerApi.Models;
+using static SprintPokerApi.Extensions.Service.KeycloakAuth;
 
 namespace SprintPokerApi.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext : DbContext
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) 
+        : base(options)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
     public DbSet<Card> Cards { get; set; }
     public DbSet<CardSet> CardSets { get; set; }
     public DbSet<PokerPlayer> PokerPlayers { get; set; }
@@ -44,7 +55,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     /// <remarks>
     /// This method automatically sets audit properties (CreatedAt, CreatedBy, ModifiedAt, ModifiedBy) for entities
     /// that inherit from AuditableEntity. For new entities, CreatedAt, CreatedBy, ModifiedAt, and ModifiedBy
-    /// are set to current UTC time and user. For modified entities, only ModifiedAt and ModifiedBy are updated.
+    /// are set to the current UTC time and user. For modified entities, only ModifiedAt and ModifiedBy are updated.
     /// </remarks>
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
     {
@@ -55,20 +66,22 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 e.State == EntityState.Added
                 || e.State == EntityState.Modified
             ));
+        
+        // Get the username from the JWT token
+        var username = GetKeycloakJwtUsername(_httpContextAccessor?.HttpContext);
 
         // For each entity we will set the Audit properties
         foreach (var entityEntry in entries)
         {
-            // If the entity state is Added let's set the CreatedAt and CreatedBy properties
+            // If the entity state is Added, let's set the CreatedAt and CreatedBy properties
             if (entityEntry.State == EntityState.Added)
             {
                 ((AuditableEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
-                // TODO: Get username from the token
-                /* ((AuditableEntity)entityEntry.Entity).CreatedBy = this.httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "MyApp"; */
+                ((AuditableEntity)entityEntry.Entity).CreatedBy = username;
             }
             else
             {
-                // If the state is Modified then we don't want to modify the CreatedAt and CreatedBy properties
+                // If the state is Modified, then we don't want to modify the CreatedAt and CreatedBy properties,
                 // so we set their state as IsModified to false
                 Entry((AuditableEntity)entityEntry.Entity).Property(p => p.CreatedAt).IsModified = false;
                 Entry((AuditableEntity)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
@@ -77,11 +90,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             // In any case we always want to set the properties
             // ModifiedAt and ModifiedBy
             ((AuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
-            // TODO: Get username from the token
-            /* ((AuditableEntity)entityEntry.Entity).ModifiedBy = this.httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "MyApp"; */
+            ((AuditableEntity)entityEntry.Entity).ModifiedBy = username;
         }
 
-        // After we set all the needed properties we call the base implementation of SaveChangesAsync
+        // After we set all the necessary properties, we call the base implementation of SaveChangesAsync
         // to actually save our entities in the database
         return await base.SaveChangesAsync(cancellationToken);
     }
