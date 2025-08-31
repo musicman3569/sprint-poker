@@ -4,7 +4,6 @@ html {
     background-color: #1e1e23;
     color: #ffffff;
     font-family: "Oxanium", sans-serif;
-    font-size: 13px;
     background-image: url("./assets/poker-table-background.jpg");
     background-size: cover;
     background-position: center;
@@ -21,12 +20,6 @@ body {
     width: 14em;
 }
 
-/* 
-Main Theme Colors:
-Bright purple: #aa82ff
-Bright orange: #ffc000 
-*/
-
 :root {
     font-family: "Oxanium", sans-serif;
     --font-family: "Oxanium", sans-serif;
@@ -40,19 +33,19 @@ Bright orange: #ffc000
 /* Set PrimeReact table background to prevent background image
 showing through the currently highlighted row instead of the color */
 .p-datatable .p-datatable-tbody > tr:hover {
-    background: #54447b;
+    background: hsl(120, 60%, 34%);
 }
 
 /* Fix PrimeReact issue with highlighted frozen column being transparent
 and showing other column headers through it when horizontally scrolling */
 .p-datatable .p-sortable-column.p-highlight {
-    background: #3e3b55;
+    background: hsl(120, 30%, 20%);
 }
 
 /* Set PrimeReact table header to different background color than rows */
 .p-datatable .p-datatable-thead > tr > th {
-    color: hsl(259, 100%, 85%);
-    background: hsl(236, 15%, 25%);
+    color: hsl(120, 100%, 40%);
+    background: hsl(120, 30%, 20%);
 }
 
 /* Set PrimeReact active filter menu button to different background color */
@@ -70,7 +63,7 @@ and showing other column headers through it when horizontally scrolling */
 
 /* Set PrimeReact frozen column background color */
 .p-datatable-scrollable .p-frozen-column {
-    background: #363749ff;
+    background: hsl(120, 30%, 20%);
 }
 
 /* Set PrimeReact editable column background color to a different color 
@@ -90,7 +83,7 @@ color while editing */
 
 /* Set PrimeReact table toolbar header background color */
 .p-datatable .p-datatable-header {
-    background: #282936cc;
+    background: hsl(120, 30%, 15%);
 }
 
 /* Set PrimeReact TabView panels to transparent background so the
