@@ -27,6 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Extensions\WebApplication\" />
       <Folder Include="Migrations\" />
     </ItemGroup>
 

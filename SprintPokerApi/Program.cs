@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using SprintPokerApi.Data;
 using Serilog;
+using SprintPokerApi.Extensions.Service;
 
 var builder = WebApplication.CreateBuilder(args);
-var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()
@@ -12,6 +12,7 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 // Add services to the container.
+builder.Services.AddKeycloakJwtAuth();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
