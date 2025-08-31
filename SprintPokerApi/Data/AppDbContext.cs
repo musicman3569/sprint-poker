@@ -24,7 +24,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     {
         base.OnModelCreating(modelBuilder);
 
-        // Apply all IEntityTypeConfiguration<> classes from this assembly
+        // Apply all IEntityTypeConfiguration<> classes from this assembly. This applies all the Configuration
+        // override settings from each Model class, such as explicit constraints, relationships, and indexes.
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
         // Apply C# documentation comments as database comments
