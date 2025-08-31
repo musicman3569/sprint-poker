@@ -25,7 +25,7 @@ function App() {
           <PrimeReactProvider>
               <TabView activeIndex={activeTabIndex} onTabChange={(e) => setActiveTabIndex(e.index)}>
                   <TabPanel className="border-round-top-xl mr-2" header={<>
-                      <i className="pi pi-play"></i> <span>Current Game</span>
+                      <span>Current Game</span>
                   </>}>
                       <h1>Game</h1>
                   </TabPanel>
