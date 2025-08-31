@@ -8,8 +8,6 @@ import keycloak from "./utils/KeycloakInit"
 
 
 function App() {
-    
-  
   return (
       <ReactKeycloakProvider
           authClient={keycloak}

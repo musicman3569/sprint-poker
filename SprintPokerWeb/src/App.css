@@ -1,42 +1,112 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
+
+html {
+    background-color: #1e1e23;
+    color: #ffffff;
+    font-family: "Oxanium", sans-serif;
+    font-size: 13px;
+    background-image: url("./assets/poker-table-background.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+body {
+    background-image: none;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.swapi-form-label {
+    width: 14em;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* 
+Main Theme Colors:
+Bright purple: #aa82ff
+Bright orange: #ffc000 
+*/
+
+:root {
+    font-family: "Oxanium", sans-serif;
+    --font-family: "Oxanium", sans-serif;
 }
 
-.card {
-  padding: 2em;
+/* Set PrimeReact table background for non-frozen columns  */
+.p-datatable .p-datatable-tbody > tr {
+    background: hsla(236, 15%, 13%, 0.95);
 }
 
-.read-the-docs {
-  color: #888;
+/* Set PrimeReact table background to prevent background image
+showing through the currently highlighted row instead of the color */
+.p-datatable .p-datatable-tbody > tr:hover {
+    background: #54447b;
 }
+
+/* Fix PrimeReact issue with highlighted frozen column being transparent
+and showing other column headers through it when horizontally scrolling */
+.p-datatable .p-sortable-column.p-highlight {
+    background: #3e3b55;
+}
+
+/* Set PrimeReact table header to different background color than rows */
+.p-datatable .p-datatable-thead > tr > th {
+    color: hsl(259, 100%, 85%);
+    background: hsl(236, 15%, 25%);
+}
+
+/* Set PrimeReact active filter menu button to different background color */
+.p-column-filter-menu-button.p-column-filter-menu-button-active, 
+.p-column-filter-menu-button.p-column-filter-menu-button-active:hover,
+.p-column-filter-menu-button.p-column-filter-menu-button-open {
+    background: #ffc000cc;
+    color: #000000;
+}
+
+/* Set PrimeReact active sort icon to different color */
+.p-datatable .p-sortable-column.p-highlight .p-sortable-column-icon {
+    color: #ffc000;
+}
+
+/* Set PrimeReact frozen column background color */
+.p-datatable-scrollable .p-frozen-column {
+    background: #363749ff;
+}
+
+/* Set PrimeReact editable column background color to a different color 
+while editing */
+.p-editable-column.p-cell-editing {
+    background: #ffc000cc;
+    color: #000000;
+}
+
+/* Set PrimeReact row editor save/cancel buttons to different background 
+color while editing */
+.p-datatable .p-datatable-tbody > tr > td .p-row-editor-save,
+.p-datatable .p-datatable-tbody > tr > td .p-row-editor-cancel {
+    background: #ffc000cc;
+    color: black;
+}
+
+/* Set PrimeReact table toolbar header background color */
+.p-datatable .p-datatable-header {
+    background: #282936cc;
+}
+
+/* Set PrimeReact TabView panels to transparent background so the
+transparent table backround effects work  */
+.p-tabview .p-tabview-panels {
+    background: none;
+}
+
+/* Remove PrimeReact tabview padding so that the tab content touches
+the tab header instead of having a gap */
+.p-tabview .p-tabview-panels {
+    padding: 0;
+}
+
+/* App.css (or a CSS module) */
+.p-tabview .p-tabview-nav li.tab-rightmost { margin-left: auto; }
+
+/* optional: keep the nav full-width to make the push work nicely */
+.p-tabview .p-tabview-nav { display: flex; }

@@ -109,7 +109,7 @@ services:
     volumes:
       - ./SSL:/SSL
       - ./Keycloak/import:/opt/keycloak/data/import
-      #- ./Keycloak/themes/sprintpoker:/opt/keycloak/themes/sprintpoker
+      - ./Keycloak/themes/sprintpoker:/opt/keycloak/themes/sprintpoker
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
