@@ -16,7 +16,6 @@ export type ColumnFilterKind =
     | 'boolean';
 
 export interface ColumnSpec {
-    /** One of the preset kinds above. */
     kind: ColumnFilterKind;
     dataType?: 'text' | 'numeric' | 'date' | string | undefined;
     width?: string;
@@ -66,13 +65,11 @@ export function getModelDisplayName(spec: ModelSpec): string {
 
 export function getModelSelectItems(columnSpec: ColumnSpec, rowDataFieldValue: any[]): SelectItem[] {
     const items: SelectItem[] = [];
-    if (columnSpec.kind === 'dropdown' || columnSpec.kind === 'multiselect') {
-        for (const item of rowDataFieldValue) {
-            items.push({
-                label: item[columnSpec.selectLabelField ?? 'Name'],
-                value: item[columnSpec.selectValueField ?? 'Name']
-            } as SelectItem);
-        }
+    for (const item of rowDataFieldValue) {
+        items.push({
+            label: item[columnSpec.selectLabelField ?? 'Name'],
+            value: item[columnSpec.selectValueField ?? 'Name']
+        } as SelectItem);
     }
     return items;
 }
@@ -117,6 +114,7 @@ function defaultConstraint(kind: ColumnFilterKind) {
         case 'id':
             return { value: null, matchMode: FilterMatchMode.EQUALS };
         case 'text':
+        case 'dropdown':
             return { value: null, matchMode: FilterMatchMode.CONTAINS };
         case 'number':
             // DataTable uses a single value for BETWEEN with array [min, max] or a small object – we’ll keep null start
@@ -126,8 +124,6 @@ function defaultConstraint(kind: ColumnFilterKind) {
                 { value: null, matchMode: FilterMatchMode.DATE_AFTER },  // start
                 { value: null, matchMode: FilterMatchMode.DATE_BEFORE }  // end
             ];
-        case 'dropdown':
-            return { value: null, matchMode: FilterMatchMode.IN };
         case 'multiselect':
             return { value: null, matchMode: FilterMatchMode.IN };
         case 'boolean':
@@ -178,17 +174,17 @@ export function buildDefaultFilters(spec: ModelSpec): DataTableFilterMeta {
                 value: base.value,
                 matchMode: def.matchMode ?? base.matchMode,
             }];
-
-        // kinds using constraint array vs simple value:
+        
         if (
             def.kind === 'id' ||
             def.kind === 'text' ||
             def.kind === 'date'
+            // def.kind === 'dropdown'
         ) {
             meta[field] = {operator: operator, constraints: constraint};
         } else if (def.kind === 'number') {
             meta[field] = { value: null, matchMode: FilterMatchMode.BETWEEN };
-        } else if (def.kind === 'dropdown' || def.kind === 'multiselect' || def.kind === 'boolean') {
+        } else if (def.kind === 'multiselect' || def.kind === 'boolean') {
             meta[field] = constraint[0];
         }
     }

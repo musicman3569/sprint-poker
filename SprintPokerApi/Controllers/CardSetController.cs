@@ -23,7 +23,10 @@ public class CardSetController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CardSet>>> GetCardSets()
     {
-        return Ok(await _dbContext.CardSets.ToListAsync());
+        return Ok(await _dbContext.CardSets
+            .AsNoTracking()
+            .Include(cs => cs.Cards)
+            .ToListAsync());
     }
 
     [HttpGet("{id}")]

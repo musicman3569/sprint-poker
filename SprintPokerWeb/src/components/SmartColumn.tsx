@@ -1,5 +1,5 @@
 import { Column, type ColumnFilterElementTemplateOptions } from "primereact/column";
-import { type ColumnSpec } from '../utils/DataTableColumn';
+import {type ColumnSpec, getModelSelectItems} from '../utils/DataTableColumn';
 import { type FilterCallback } from "../utils/DataTableFilterCache";
 import {type CSSProperties} from "react";
 import {formatDateCustom, formatNumber, formatHeaderText, type RowData} from "../utils/DataTableCellFormat";
@@ -7,10 +7,10 @@ import {FilterText} from "./FilterElement/FilterText";
 import {FilterId} from "./FilterElement/FilterId";
 import {FilterNumber} from "./FilterElement/FilterNumber";
 import {FilterDate} from "./FilterElement/FilterDate";
-import {FilterDropdown} from "./FilterElement/FilterDropdown";
 import {FilterBoolean} from "./FilterElement/FilterBoolean";
 import {FilterMultiselect} from "./FilterElement/FilterMultiselect"
 import DataTableEditor from "./DataTableEditor";
+import {Dropdown} from "primereact/dropdown";
 
 const defaultWidth = '14rem';
 
@@ -38,8 +38,7 @@ function SmartColumn({
     const style: CSSProperties = {
         minWidth: spec.width ?? defaultWidth
     };
-
-
+    
     /**
      * Returns the appropriate filter element component based on the column specification type
      * @returns {(opts: ColumnFilterElementTemplateOptions) => JSX.Element} Filter element component
@@ -58,11 +57,6 @@ function SmartColumn({
             case 'boolean':
                 return (opts: ColumnFilterElementTemplateOptions) =>
                     <FilterBoolean field={field} options={opts} filterCallbacks={filterCallbacks}/>;
-            case 'dropdown':
-                return (opts: ColumnFilterElementTemplateOptions) =>
-                    <FilterDropdown 
-                        field={field} options={opts} filterCallbacks={filterCallbacks}
-                        items={spec.selectItems ?? []}/>;
             case 'multiselect':
                 return (opts: ColumnFilterElementTemplateOptions) =>
                     <FilterMultiselect
@@ -87,8 +81,14 @@ function SmartColumn({
             case 'boolean':
                 return (rowData: RowData) => rowData[field] ? 'Y' : 'N';
             case 'dropdown':
+                return (rowData: RowData) => 
+                    <Dropdown
+                        value={rowData[field][0][spec.selectValueField ?? '']}
+                        options={getModelSelectItems(spec, rowData[field])}
+                        readOnly={true}
+                    />;
             case 'multiselect':
-                return (rowData: RowData) => spec.selectItems?.find(i => i?.value === rowData[field])?.label ?? rowData[field];
+                return "";
             default:
                 return (rowData: RowData) => rowData[field] ?? '';
         }
