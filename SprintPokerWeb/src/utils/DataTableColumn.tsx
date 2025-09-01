@@ -26,11 +26,14 @@ export interface ColumnSpec {
     operator?: FilterOperator;
     /** For simple kinds use a single matchMode override (optional). */
     matchMode?: FilterMatchMode;
-    selectItems?: SelectItem[];
     isDataKey?: boolean;
+    isDisplayName?: boolean;
     isReadOnly?: boolean;
     isHidden?: boolean;
     displaySuffix?: string;
+    selectItems?: SelectItem[];
+    selectLabelField?: string;
+    selectValueField?: string;
 }
 
 export type ModelSpec = Record<string, ColumnSpec>;
@@ -50,6 +53,28 @@ export function getModelDataKey(spec: ModelSpec): string {
         }
     }
     throw new Error('No data key found in model spec');
+}
+
+export function getModelDisplayName(spec: ModelSpec): string {
+    for (const [field, def] of Object.entries(spec)) {
+        if (def.isDisplayName) {
+            return field;
+        }
+    }
+    return getModelDataKey(spec);
+}
+
+export function getModelSelectItems(columnSpec: ColumnSpec, rowDataFieldValue: any[]): SelectItem[] {
+    const items: SelectItem[] = [];
+    if (columnSpec.kind === 'dropdown' || columnSpec.kind === 'multiselect') {
+        for (const item of rowDataFieldValue) {
+            items.push({
+                label: item[columnSpec.selectLabelField ?? 'Name'],
+                value: item[columnSpec.selectValueField ?? 'Name']
+            } as SelectItem);
+        }
+    }
+    return items;
 }
 
 
@@ -102,7 +127,7 @@ function defaultConstraint(kind: ColumnFilterKind) {
                 { value: null, matchMode: FilterMatchMode.DATE_BEFORE }  // end
             ];
         case 'dropdown':
-            return { value: null, matchMode: FilterMatchMode.EQUALS };
+            return { value: null, matchMode: FilterMatchMode.IN };
         case 'multiselect':
             return { value: null, matchMode: FilterMatchMode.IN };
         case 'boolean':

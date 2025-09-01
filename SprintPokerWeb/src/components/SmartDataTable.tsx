@@ -2,7 +2,7 @@ import {useState, useEffect, useMemo, useRef} from 'react';
 import {DeleteData, FetchData, UpdateData} from '../utils/ApiClient';
 import {DataTable, type DataTableFilterMeta} from 'primereact/datatable';
 import SmartColumn from './SmartColumn.tsx';
-import {type ModelSpec, getModelDataKey, buildDefaultFilters, getModelGlobalFilterFields} from '../utils/DataTableColumn';
+import {type ModelSpec, getModelDataKey, getModelDisplayName, buildDefaultFilters, getModelGlobalFilterFields} from '../utils/DataTableColumn';
 import {Column} from "primereact/column";
 import {useCachedFilterCallbacks} from "../utils/DataTableFilterCache.ts";
 import DataTableHeader from "./DataTableHeader.tsx";
@@ -26,6 +26,7 @@ function SmartDataTable({
 }) {
     const cssHeightToPageBottom = "calc(100vh - 190px)";
     const modelDataKey = getModelDataKey(modelSpec);
+    const modelDisplayName = getModelDisplayName(modelSpec);
     const { keycloak, initialized } = useKeycloak();
     const toast = useRef<Toast>(null);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -117,7 +118,7 @@ function SmartDataTable({
                 toast.current?.show({
                     severity: 'success',
                     summary: 'Update Success',
-                    detail: `${responseData.name} updated successfully`,
+                    detail: `${responseData[modelDisplayName]} updated successfully`,
                     life: 3000
                 });
             },
@@ -153,7 +154,7 @@ function SmartDataTable({
                 toast.current?.show({
                     severity: 'success',
                     summary: 'Delete Success',
-                    detail: `${rowData.name} deleted successfully`,
+                    detail: `${rowData[modelDisplayName]} deleted successfully`,
                     life: 3000
                 });
             },
@@ -186,7 +187,7 @@ function SmartDataTable({
             scrollHeight={loading ? "0px" : cssHeightToPageBottom}
             dataKey={modelDataKey}
             sortMode="single"
-            sortField="name"
+            sortField={modelDisplayName}
             sortOrder={1}
             filters={filters}
             onFilter={(e) => setFilters(e.filters as DataTableFilterMeta)}
@@ -218,7 +219,7 @@ function SmartDataTable({
                         icon="pi pi-trash" 
                         onClick={() => {
                             confirmDialog({
-                                message: `Are you sure you want to delete ${rowData.name}?`,
+                                message: `Are you sure you want to delete ${rowData[modelDisplayName]}?`,
                                 header: `Delete Row`,
                                 icon: 'pi pi-exclamation-triangle',
                                 defaultFocus: 'cancel',

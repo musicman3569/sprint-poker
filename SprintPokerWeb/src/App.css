@@ -83,7 +83,7 @@ color while editing */
 
 /* Set PrimeReact table toolbar header background color */
 .p-datatable .p-datatable-header {
-    background: hsl(120, 30%, 15%);
+    background: rgba(40, 41, 54, 0.8);
 }
 
 /* Set PrimeReact TabView panels to transparent background so the
