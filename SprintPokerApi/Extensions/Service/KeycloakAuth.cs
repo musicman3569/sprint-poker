@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -35,6 +34,12 @@ public static class KeycloakAuth
                     // Required Realm Roles from Keycloak
                     .RequireClaim("groups", "poker_admin", "poker_user")
                     .Build();
+                options.AddPolicy("poker_admin", policy =>
+                    policy
+                        .RequireAuthenticatedUser()
+                        .RequireClaim("groups", "poker_admin")
+                        .Build()
+                );
             });
         
         return services;
@@ -61,6 +66,8 @@ public static class KeycloakAuth
                     .AllowAnyHeader();
             });
         });
+        
+        Console.WriteLine("Keycloak CORS policies complete.");
         
         return services;
     }
@@ -103,7 +110,7 @@ public static class KeycloakAuth
     /// <param name="isDevelopment">Flag indicating if the application is running in development mode.</param>
     private static void AddJwtCertsHandler(JwtBearerOptions options, bool isDevelopment)
     {
-        if (isDevelopment)
+        if (true /*isDevelopment*/)
         {
             // Needed for self-signed certs
             options.BackchannelHttpHandler = new HttpClientHandler

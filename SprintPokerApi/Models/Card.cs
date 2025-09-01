@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SprintPokerApi.Models;
 
@@ -23,5 +24,6 @@ public class Card : AuditableEntity
     public int CardSetId { get; set; }
     
     /// <summary>The associated card set that contains this card.</summary>
+    [JsonIgnore]
     public CardSet CardSet { get; set; } = new();
 }

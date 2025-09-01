@@ -8,10 +8,12 @@ import {TabPanel, TabView} from "primereact/tabview";
 import keycloak from "./utils/KeycloakInit"
 import {useState} from "react";
 import UserMenu from "./components/UserMenu.tsx";
+import SmartDataTable from "./components/SmartDataTable.tsx";
+import ModelCardSet from "./models/ModelCardSet.ts";
 
 
 function App() {
-    const [activeTabIndex, setActiveTabIndex] = useState(0);
+    const [activeTabIndex, setActiveTabIndex] = useState(1);
     
   return (
       <ReactKeycloakProvider
@@ -32,7 +34,7 @@ function App() {
                   <TabPanel className="border-round-top-xl mr-2" header={<>
                       <i className="pi pi-clone"></i> <span>Card Sets</span>
                   </>}>
-                      <h1>Card Sets</h1>
+                      <SmartDataTable modelSpec={ModelCardSet}></SmartDataTable>
                   </TabPanel>
                   <TabPanel className="border-round-top-xl mr-2" headerClassName="tab-rightmost" header={<>
                       <i className="pi pi-bars mr-2"></i>

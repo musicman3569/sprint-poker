@@ -15,4 +15,7 @@ public class CardSet : AuditableEntity
     /// <summary>The name of the card set. Limited to 36 characters.</summary>
     [MaxLength(36)]
     public string Name { get; set; } = string.Empty;
+    
+    /// <summary>The list of cards in this card set.</summary>
+    public List<Card> Cards { get; set; } = new();
 }

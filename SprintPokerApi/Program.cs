@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using SprintPokerApi.Data;
 using Serilog;
@@ -13,11 +15,19 @@ Log.Logger = new LoggerConfiguration()
 
 // Add services to the container.
 builder.Services.AddKeycloakJwtAuth();
-
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    options.JsonSerializerOptions.DictionaryKeyPolicy = null;
+});
 builder.Services.AddHttpContextAccessor();
 
 // Configure Entity Framework Core with PostgreSQL
@@ -37,11 +47,15 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sprint Poker API v1");
+        c.RoutePrefix = string.Empty; // makes Swagger UI available at "/"
+    });
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowClientApp");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
